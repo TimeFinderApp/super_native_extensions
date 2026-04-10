@@ -52,7 +52,7 @@ public final class ClipDataHelper {
         executor.execute(() -> {
             Object res = null;
             try {
-                res = _getData(data, index, type, context);
+                res = TransferDataNormalizer.normalize(_getData(data, index, type, context));
             } catch (Exception e) {
                 Log.w("ClipData", "getData failed", e);
             }
