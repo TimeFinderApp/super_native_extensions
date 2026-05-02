@@ -17,8 +17,7 @@ let package = Package(
             dependencies: ["SuperNativeExtensionsRust"],
             publicHeadersPath: ".",
             linkerSettings: [
-                .linkedFramework("CoreServices"),
-                .unsafeFlags(["-Wl,-all_load"])
+                .linkedFramework("CoreServices")
             ]
         )
     ]
