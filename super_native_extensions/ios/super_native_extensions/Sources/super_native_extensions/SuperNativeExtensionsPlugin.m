@@ -7,6 +7,13 @@ extern bool super_native_extensions_text_input_plugin_cut(void);
 extern bool super_native_extensions_text_input_plugin_copy(void);
 extern bool super_native_extensions_text_input_plugin_paste(void);
 extern bool super_native_extensions_text_input_plugin_select_all(void);
+extern void super_native_extensions_init_message_channel_context(void);
+
+typedef void (*SNESymbolAnchor)(void);
+
+__attribute__((used)) static SNESymbolAnchor super_native_extensions_spm_symbol_anchors[] = {
+    &super_native_extensions_init_message_channel_context,
+};
 
 static void swizzleTextInputPlugin();
 

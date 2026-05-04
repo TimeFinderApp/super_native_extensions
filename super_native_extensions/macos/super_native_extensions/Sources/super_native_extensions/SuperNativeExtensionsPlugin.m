@@ -1,6 +1,13 @@
 #import "SuperNativeExtensionsPlugin.h"
 
 extern void super_native_extensions_init(void);
+extern void super_native_extensions_init_message_channel_context(void);
+
+typedef void (*SNESymbolAnchor)(void);
+
+__attribute__((used)) static SNESymbolAnchor super_native_extensions_spm_symbol_anchors[] = {
+    &super_native_extensions_init_message_channel_context,
+};
 
 @implementation SuperNativeExtensionsPlugin
 
