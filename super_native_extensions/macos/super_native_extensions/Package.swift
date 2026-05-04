@@ -17,7 +17,12 @@ let package = Package(
             dependencies: ["SuperNativeExtensionsRust"],
             publicHeadersPath: ".",
             linkerSettings: [
-                .linkedFramework("Carbon")
+                .linkedFramework("Carbon"),
+                .unsafeFlags([
+                    "-u", "_super_native_extensions_init_message_channel_context",
+                    "-u", "_super_native_extensions_stream_write",
+                    "-u", "_super_native_extensions_stream_close"
+                ])
             ]
         )
     ]
