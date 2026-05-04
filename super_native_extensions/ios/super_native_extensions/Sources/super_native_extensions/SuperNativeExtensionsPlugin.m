@@ -9,15 +9,29 @@ extern bool super_native_extensions_text_input_plugin_copy(void);
 extern bool super_native_extensions_text_input_plugin_paste(void);
 extern bool super_native_extensions_text_input_plugin_select_all(void);
 extern int64_t super_native_extensions_init_message_channel_context(void *data);
+extern int32_t super_native_extensions_stream_write(int32_t handle,
+                                                    uint8_t *data,
+                                                    int64_t len);
+extern void super_native_extensions_stream_close(int32_t handle, bool delete);
 
 typedef int64_t (*SNEMessageChannelContextInitFunction)(void *);
+typedef int32_t (*SNEStreamWriteFunction)(int32_t, uint8_t *, int64_t);
+typedef void (*SNEStreamCloseFunction)(int32_t, bool);
 
 static volatile SNEMessageChannelContextInitFunction
     super_native_extensions_spm_message_channel_context_anchor;
+static volatile SNEStreamWriteFunction
+    super_native_extensions_spm_stream_write_anchor;
+static volatile SNEStreamCloseFunction
+    super_native_extensions_spm_stream_close_anchor;
 
 static void SNEKeepMessageChannelContextSymbolLinked(void) {
   super_native_extensions_spm_message_channel_context_anchor =
       &super_native_extensions_init_message_channel_context;
+  super_native_extensions_spm_stream_write_anchor =
+      &super_native_extensions_stream_write;
+  super_native_extensions_spm_stream_close_anchor =
+      &super_native_extensions_stream_close;
 }
 
 static void swizzleTextInputPlugin();
