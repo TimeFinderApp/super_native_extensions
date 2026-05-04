@@ -1,10 +1,24 @@
 #import "SuperNativeExtensionsPlugin.h"
 
+#include <stdint.h>
+
 extern void super_native_extensions_init(void);
+extern int64_t super_native_extensions_init_message_channel_context(void *data);
+
+typedef int64_t (*SNEMessageChannelContextInitFunction)(void *);
+
+static volatile SNEMessageChannelContextInitFunction
+    super_native_extensions_spm_message_channel_context_anchor;
+
+static void SNEKeepMessageChannelContextSymbolLinked(void) {
+  super_native_extensions_spm_message_channel_context_anchor =
+      &super_native_extensions_init_message_channel_context;
+}
 
 @implementation SuperNativeExtensionsPlugin
 
 + (void)initialize {
+  SNEKeepMessageChannelContextSymbolLinked();
   super_native_extensions_init();
 }
 

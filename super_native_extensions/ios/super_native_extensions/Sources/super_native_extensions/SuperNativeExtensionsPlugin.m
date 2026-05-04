@@ -1,18 +1,31 @@
 #import "SuperNativeExtensionsPlugin.h"
 
 #include <objc/runtime.h>
+#include <stdint.h>
 
 extern void super_native_extensions_init(void);
 extern bool super_native_extensions_text_input_plugin_cut(void);
 extern bool super_native_extensions_text_input_plugin_copy(void);
 extern bool super_native_extensions_text_input_plugin_paste(void);
 extern bool super_native_extensions_text_input_plugin_select_all(void);
+extern int64_t super_native_extensions_init_message_channel_context(void *data);
+
+typedef int64_t (*SNEMessageChannelContextInitFunction)(void *);
+
+static volatile SNEMessageChannelContextInitFunction
+    super_native_extensions_spm_message_channel_context_anchor;
+
+static void SNEKeepMessageChannelContextSymbolLinked(void) {
+  super_native_extensions_spm_message_channel_context_anchor =
+      &super_native_extensions_init_message_channel_context;
+}
 
 static void swizzleTextInputPlugin();
 
 @implementation SuperNativeExtensionsPlugin
 
 + (void)initialize {
+  SNEKeepMessageChannelContextSymbolLinked();
   super_native_extensions_init();
   swizzleTextInputPlugin();
 }
